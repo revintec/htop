@@ -52,7 +52,7 @@ typedef struct Row_ {
    bool tag;
 
    /* Whether to display this row */
-   bool show;
+   bool show,showEx;
 
    /* Whether this row was shown last cycle */
    bool wasShown;

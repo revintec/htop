@@ -251,11 +251,16 @@ void Table_rebuildPanel(Table* this) {
    bool foundFollowed = false;
    int idx = 0;
 
+   for(int i=0;i<rowCount;i++)((Row*)Vector_get(this->displayList,i))->showEx=row->show&&!Row_matchesFilter(row,this);
+   if(this->host->settings->ss->treeView)for(int i=0;i<rowCount;i++){
+      Row*row=(Row*)Vector_get(this->displayList,i);if(row->showEx=true)
+      while(row=Hashtable_get(this->table,Row_getGroupOrParent(row)))row->showEx=true;
+   }
+
    for (int i = 0; i < rowCount; i++) {
       Row* row = (Row*) Vector_get(this->displayList, i);
 
-      if ( !row->show || (Row_matchesFilter(row, this) == true) )
-         continue;
+      if(!row->showEx)continue;
 
       Panel_set(this->panel, idx, (Object*)row);
 

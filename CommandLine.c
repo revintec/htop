@@ -93,11 +93,11 @@ typedef struct CommandLineSettings_ {
 } CommandLineSettings;
 
 static CommandLineStatus parseArguments(int argc, char** argv, CommandLineSettings* flags) {
-
+   int euid=geteuid();
    *flags = (CommandLineSettings) {
       .pidMatchList = NULL,
       .commFilter = NULL,
-      .userId = (uid_t)-1, // -1 is guaranteed to be an invalid uid_t (see setreuid(2))
+      .userId=euid?euid:-1,// -1 is guaranteed to be an invalid uid_t (see setreuid(2))
       .sortKey = 0,
       .delay = -1,
       .iterationsRemaining = -1,
