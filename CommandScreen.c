@@ -35,11 +35,10 @@ const InfoScreenClass CommandScreen_class = {
 };
 
 CommandScreen* CommandScreen_new(Process* process) {
-   CRT_setMouse(0);CommandScreen*this=AllocThis(CommandScreen);
+   CommandScreen* this = AllocThis(CommandScreen);
    return (CommandScreen*) InfoScreen_init(&this->super, process, NULL, LINES - 2, " ");
 }
 
 void CommandScreen_delete(Object* this) {
    free(InfoScreen_done((InfoScreen*)this));
-   CRT_setMouse(1);
 }
