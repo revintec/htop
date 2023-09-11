@@ -866,7 +866,7 @@ static Htop_Reaction actionShowCommandScreen(State* st) {
    assert(Object_isA((const Object*) p, (const ObjectClass*) &Process_class));
 
    CommandScreen* cmdScr = CommandScreen_new(p);
-   InfoScreen_run((InfoScreen*)cmdScr);
+   CRT_setMouse(0);InfoScreen_run((InfoScreen*)cmdScr);CRT_setMouse(1);
    CommandScreen_delete((Object*)cmdScr);
    clear();
    CRT_enableDelay();
