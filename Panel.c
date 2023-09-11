@@ -65,6 +65,7 @@ void Panel_init(Panel* this, int x, int y, int w, int h, const ObjectClass* type
    this->defaultBar = fuBar;
    this->currentBar = fuBar;
    this->selectionColorId = PANEL_SELECTION_FOCUS;
+   this->rawStr=0;
 }
 
 void Panel_done(Panel* this) {
@@ -300,7 +301,7 @@ void Panel_draw(Panel* this, bool force_redraw, bool focus, bool highlightSelect
       }
 
       // mvprintw(y+line,x,"%s\r\n",this->rawStr); // won't work properly
-      if(this->rawStr)move(y+line,x),refresh(),printf("%s\r\n",this->rawStr);
+      if(this->rawStr)mvhline(y+line,x,' ',this->w),refresh(),printf("%s\r\n",this->rawStr);
 
       while (line < h) {
          mvhline(y + line, x, ' ', this->w);
