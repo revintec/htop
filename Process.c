@@ -842,7 +842,7 @@ bool Process_rowMatchesFilter(const Row* super, const Table* table) {
 
 void Process_init(Process* this, const Machine* host) {
    Row_init(&this->super, host);
-
+   this->st_uid=-1;
    this->cmdlineBasenameEnd = -1;
 }
 
