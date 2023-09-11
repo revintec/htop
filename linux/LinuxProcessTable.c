@@ -1070,7 +1070,7 @@ delayacct_failure:
 #endif
 
 static bool LinuxProcessTable_readCmdlineFile(Process* process, openat_arg_t procFd) {
-   char command[4096 + 1]; // max cmdline length on Linux
+   char command[65536]; // max cmdline length on Linux
    ssize_t amtRead = xReadfileat(procFd, "cmdline", command, sizeof(command));
    if (amtRead <= 0)
       return false;

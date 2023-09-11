@@ -298,6 +298,10 @@ void Panel_draw(Panel* this, bool force_redraw, bool focus, bool highlightSelect
          RichString_delete(&item);
          line++;
       }
+
+      // mvprintw(y+line,x,"%s\r\n",this->rawStr); // won't work properly
+      if(this->rawStr)move(y+line,x),refresh(),printf("%s\r\n",this->rawStr);
+
       while (line < h) {
          mvhline(y + line, x, ' ', this->w);
          line++;

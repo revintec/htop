@@ -80,6 +80,7 @@ struct Panel_ {
    FunctionBar* defaultBar;
    RichString header;
    ColorElements selectionColorId;
+   const char*rawStr;// no need to free it
 };
 
 #define Panel_setDefaultBar(this_) do { (this_)->currentBar = (this_)->defaultBar; } while (0)
