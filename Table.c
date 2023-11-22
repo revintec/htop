@@ -140,14 +140,17 @@ static int compareRowByKnownParentThenNatural(const void* v1, const void* v2) {
     return Row_compareByParent((const Row*) v1, (const Row*) v2);
 }
 
+static inline Process*asProcess(void*v){return Object_isA(v,(const ObjectClass*)&Process_class)?(Process*)v:0;}
 // Builds a sorted tree from scratch, without relying on previously gathered information
 static void Table_buildTree(Table* this) {
    Vector_prune(this->displayList);
 
    // Mark root processes
    int vsize = Vector_size(this->rows);
+   const uid_t uid=this->host->userId;Process*o;
    for (int i = 0; i < vsize; i++) {
       Row* row = (Row*) Vector_get(this->rows, i);
+      row->hasChildren=false;if((o=asProcess(row)))o->st_uid_flt=o->st_uid==uid;
       int parent = Row_getGroupOrParent(row);
       row->isRoot = false;
 
@@ -165,7 +168,11 @@ static void Table_buildTree(Table* this) {
       if (Table_findRow(this, parent) == NULL)
          row->isRoot = true;
    }
-
+   if(this->host->settings->ss->treeView)for(int i=0;i<vsize;++i)if((o=asProcess(Vector_get(this->rows,i)))){
+       bool f=o->st_uid_flt;while((o=asProcess(Hashtable_get(this->table,Row_getGroupOrParent((const Row*)o))))){
+           o->st_uid_flt=f;o->super.hasChildren=true;
+       }
+   }
    // Sort by known parent (roots first), then row ID
    Vector_quickSortCustomCompare(this->rows, compareRowByKnownParentThenNatural);
 
@@ -251,15 +258,15 @@ void Table_rebuildPanel(Table* this) {
    bool foundFollowed = false;
    int idx = 0;
 
-   for(int i=0;i<rowCount;i++){Row*row=(Row*)Vector_get(this->displayList,i);row->showEx=row->show&&!Row_matchesFilter(row,this);}
+   for(int i=0;i<rowCount;i++){Row*row=(Row*)Vector_get(this->displayList,i);row->_show=row->show&&!Row_matchesFilter(row,this);}
    if(this->host->settings->ss->treeView)for(int i=0;i<rowCount;i++){
-      Row*row=(Row*)Vector_get(this->displayList,i);if(row->showEx)while((row=Hashtable_get(this->table,Row_getGroupOrParent(row))))row->showEx=true;
+      Row*row=(Row*)Vector_get(this->displayList,i);if(row->_show)while((row=Hashtable_get(this->table,Row_getGroupOrParent(row))))row->_show=true;
    }
 
    for (int i = 0; i < rowCount; i++) {
       Row* row = (Row*) Vector_get(this->displayList, i);
 
-      if(!row->showEx)continue;
+      if(!row->_show)continue;
 
       Panel_set(this->panel, idx, (Object*)row);
 

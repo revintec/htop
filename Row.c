@@ -35,6 +35,7 @@ void Row_init(Row* this, const Machine* host) {
    this->host = host;
    this->tag = false;
    this->showChildren = true;
+   this->hasChildren = false;
    this->show = true;
    this->wasShown = false;
    this->updated = false;

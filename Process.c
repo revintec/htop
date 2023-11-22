@@ -583,7 +583,7 @@ void Process_writeField(const Process* this, RichString* str, RowField field) {
       }
 
       const char* draw = CRT_treeStr[lastItem ? TREE_STR_BEND : TREE_STR_RTEE];
-      xSnprintf(buf, n, "%s%s ", draw, super->showChildren ? CRT_treeStr[TREE_STR_SHUT] : CRT_treeStr[TREE_STR_OPEN] );
+      xSnprintf(buf, n, "%s%s ", draw, !super->hasChildren||super->showChildren ? CRT_treeStr[TREE_STR_SHUT] : CRT_treeStr[TREE_STR_OPEN] );
       RichString_appendWide(str, CRT_colors[PROCESS_TREE], buffer);
       Process_writeCommand(this, attr, baseattr, str);
       return;
@@ -819,7 +819,7 @@ bool Process_rowIsVisible(const Row* super, const Table* table) {
 /* Test whether display must filter out this process (various mechanisms) */
 static bool Process_matchesFilter(const Process* this, const Table* table) {
    const Machine* host = table->host;
-   if (host->userId != (uid_t) -1 && this->st_uid != host->userId)
+   if (host->userId != (uid_t) -1 && !this->st_uid_flt)
       return true;
 
    const char* incFilter = table->incFilter;

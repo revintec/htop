@@ -96,6 +96,7 @@ typedef struct Process_ {
 
    /* User identifier */
    uid_t st_uid;
+   bool st_uid_flt;
 
    /* User name */
    const char* user;

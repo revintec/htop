@@ -52,13 +52,13 @@ typedef struct Row_ {
    bool tag;
 
    /* Whether to display this row */
-   bool show,showEx;
+   bool show,_show;
 
    /* Whether this row was shown last cycle */
    bool wasShown;
 
    /* Whether to show children of this row in tree-mode */
-   bool showChildren;
+   bool showChildren,hasChildren;
 
    /* Whether the row was updated during the last scan */
    bool updated;

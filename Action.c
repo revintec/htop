@@ -141,16 +141,19 @@ static bool expandCollapse(Panel* panel) {
    return true;
 }
 
+static bool expandNow(Panel*panel){
+   Row*row;if(!(row=(Row*)Panel_getSelected(panel)))return false;
+   row->showChildren=true;return row->hasChildren;
+}
+
 static bool collapseIntoParent(Panel* panel) {
-   const Row* r = (Row*) Panel_getSelected(panel);
-   if (!r)
-      return false;
+   Row*r;if(!(r=(Row*)Panel_getSelected(panel)))return false;
+   if(r->hasChildren&&r->showChildren)return!(r->showChildren=false);
 
    int parent_id = Row_getGroupOrParent(r);
    for (int i = 0; i < Panel_size(panel); i++) {
       Row* row = (Row*) Panel_get(panel, i);
       if (row->id == parent_id) {
-         row->showChildren = false;
          Panel_setSelected(panel, i);
          return true;
       }
@@ -346,6 +349,11 @@ static Htop_Reaction actionExpandOrCollapse(State* st) {
 
    bool changed = expandCollapse((Panel*)st->mainPanel);
    return changed ? HTOP_RECALCULATE : HTOP_OK;
+}
+
+static Htop_Reaction actionExpandNow(State*st){
+   if(!st->host->settings->ss->treeView)return HTOP_OK;
+   return expandNow((Panel*)st->mainPanel)?HTOP_RECALCULATE:HTOP_OK;
 }
 
 static Htop_Reaction actionCollapseIntoParent(State* st) {
@@ -902,11 +910,10 @@ void Action_setBindings(Htop_Action* keys) {
    keys['Y'] = actionSetSchedPolicy;
 #endif
    keys['Z'] = actionTogglePauseUpdate;
-   keys['['] = actionLowerPriority;
+   keys['['] = actionCollapseIntoParent;
    keys['\014'] = actionRedraw; // Ctrl+L
-   keys['\177'] = actionCollapseIntoParent;
    keys['\\'] = actionIncFilter;
-   keys[']'] = actionHigherPriority;
+   keys[']'] = actionExpandNow;
    keys['a'] = actionSetAffinity;
    keys['c'] = actionTagAllChildren;
    keys['e'] = actionShowEnvScreen;
