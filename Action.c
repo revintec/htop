@@ -149,7 +149,7 @@ static bool expandNow(Panel*panel){
 
 static bool collapseIntoParent(Panel* panel) {
    Row*r;if(!(r=(Row*)Panel_getSelected(panel)))return false;
-   if(r->hasChildren&&r->showChildren&&!r->isRoot)return!(r->showChildren=false);
+   if(r->showChildren&&!r->isRoot&&!(r->showChildren=false)&&r->hasChildren)return true;
 
    int parent_id = Row_getGroupOrParent(r);
    for (int i = 0; i < Panel_size(panel); i++) {
@@ -911,10 +911,10 @@ void Action_setBindings(Htop_Action* keys) {
    keys['Y'] = actionSetSchedPolicy;
 #endif
    keys['Z'] = actionTogglePauseUpdate;
-   keys['['] = actionCollapseIntoParent;
+   keys[KEY_LEFT] = actionCollapseIntoParent;
    keys['\014'] = actionRedraw; // Ctrl+L
    keys['\\'] = actionIncFilter;
-   keys[']'] = actionExpandNow;
+   keys[KEY_RIGHT] = actionExpandNow;
    keys['a'] = actionSetAffinity;
    keys['c'] = actionTagAllChildren;
    keys['e'] = actionShowEnvScreen;
