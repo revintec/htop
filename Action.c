@@ -148,7 +148,7 @@ static bool expandNow(Panel*panel){
 
 static bool collapseIntoParent(Panel* panel) {
    Row*r;if(!(r=(Row*)Panel_getSelected(panel)))return false;
-   if(r->hasChildren&&r->showChildren)return!(r->showChildren=false);
+   if(r->hasChildren&&r->showChildren&&!r->isRoot)return!(r->showChildren=false);
 
    int parent_id = Row_getGroupOrParent(r);
    for (int i = 0; i < Panel_size(panel); i++) {
