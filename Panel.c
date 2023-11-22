@@ -378,7 +378,7 @@ bool Panel_onKey(Panel* this, int key) {
       this->selected--;
       break;
 
-   case KEY_LEFT:
+   case KEY_LEFT:case'[':
    case KEY_CTRL('B'):
       if (this->scrollH > 0) {
          this->scrollH -= MAXIMUM(CRT_scrollHAmount, 0);
@@ -386,7 +386,7 @@ bool Panel_onKey(Panel* this, int key) {
       }
       break;
 
-   case KEY_RIGHT:
+   case KEY_RIGHT:case']':
    case KEY_CTRL('F'):
       this->scrollH += CRT_scrollHAmount;
       this->needsRedraw = true;
