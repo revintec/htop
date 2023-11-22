@@ -142,8 +142,9 @@ static bool expandCollapse(Panel* panel) {
 }
 
 static bool expandNow(Panel*panel){
-   Row*row;if(!(row=(Row*)Panel_getSelected(panel)))return false;
-   row->showChildren=true;return row->hasChildren;
+   Row*row;if(!(row=(Row*)Panel_getSelected(panel)))return false;if(row->showChildren)for(int i=0;i<Panel_size(panel);++i){
+      Row*r=(Row*)Panel_get(panel,i);if(Row_getGroupOrParent(r)==row->id&&!r->showChildren){Panel_setSelected(panel,i);break;}
+   }else row->showChildren=true;return true;
 }
 
 static bool collapseIntoParent(Panel* panel) {
