@@ -259,8 +259,8 @@ void Table_rebuildPanel(Table* this) {
    int idx = 0;
 
    for(int i=0;i<rowCount;i++){Row*row=(Row*)Vector_get(this->displayList,i);row->_show=row->show&&!Row_matchesFilter(row,this);}
-   if(this->host->settings->ss->treeView)for(int i=0;i<rowCount;i++){
-      Row*row=(Row*)Vector_get(this->displayList,i);if(row->_show)while((row=Hashtable_get(this->table,Row_getGroupOrParent(row))))row->_show=true;
+   if(this->host->settings->ss->treeView)for(int i=0;i<rowCount;i++){Row*row=(Row*)Vector_get(this->displayList,i);
+       if(row->_show)while((row=Hashtable_get(this->table,Row_getGroupOrParent(row))))row->_show=true;
    }
 
    for (int i = 0; i < rowCount; i++) {
