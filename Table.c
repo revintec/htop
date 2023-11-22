@@ -169,7 +169,7 @@ static void Table_buildTree(Table* this) {
          row->isRoot = true;
    }
    if(this->host->settings->ss->treeView)for(int i=0;i<vsize;++i)if((o=asProcess(Vector_get(this->rows,i)))){
-       bool f=o->st_uid_flt;while((o=asProcess(Hashtable_get(this->table,Row_getGroupOrParent((const Row*)o))))){
+       bool f=o->st_uid_flt;while((o=asProcess(Hashtable_get(this->table,Process_getParent(o))))){
            o->st_uid_flt=f;o->super.hasChildren=true;
        }
    }
